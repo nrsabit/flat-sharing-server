@@ -1,5 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
+import globalErrorHandler from "./app/errors/globalErrorHandler";
+import notFoundError from "./app/errors/notFoundError";
 
 const app: Application = express();
 
@@ -11,5 +13,14 @@ app.use(express.json());
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to the flat sharing app.");
 });
+
+// router
+app.use("/api", express.Router());
+
+// global error handler
+app.use(globalErrorHandler);
+
+// not found error
+app.use(notFoundError);
 
 export default app;
