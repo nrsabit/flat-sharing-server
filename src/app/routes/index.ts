@@ -1,6 +1,7 @@
 import express from "express";
 import { UserRoutes } from "../modules/user/user.routes";
 import { FlatRoutes } from "../modules/flat/flat.routes";
+import { BookingRoutes } from "../modules/booking/booking.routes";
 
 const routes = express.Router();
 
@@ -12,6 +13,10 @@ const moduleRoutes = [
   {
     path: "/flats",
     route: FlatRoutes,
+  },
+  {
+    path: "/",
+    route: BookingRoutes,
   },
 ];
 

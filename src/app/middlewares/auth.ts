@@ -17,11 +17,11 @@ const auth = () => {
 
       const decodedUser = verifyToken(token) as JwtPayload;
 
-      const userData = prisma.user.findUniqueOrThrow({
+      await prisma.user.findUniqueOrThrow({
         where: { id: decodedUser.id },
       });
 
-      req.user = userData;
+      req.user = decodedUser;
 
       next();
     } catch (err) {
