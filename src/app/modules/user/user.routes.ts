@@ -1,8 +1,20 @@
+import validateRequest from "../../utils/validateRequest";
 import { UserControllers } from "./user.controllers";
 import express from "express";
+import { UserValidations } from "./user.validations";
 
 const router = express.Router();
 
-router.post("/register", UserControllers.registerController);
+router.post(
+  "/register",
+  validateRequest(UserValidations.createUserSchema),
+  UserControllers.registerController
+);
 
-export const UserRoutes = router
+router.post(
+  "/login",
+  validateRequest(UserValidations.loginUserSchema),
+  UserControllers.loginController
+);
+
+export const UserRoutes = router;

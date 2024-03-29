@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
 import { config } from "../../config";
 import prisma from "../../shared/prisma";
-import { TUserPayload } from "./user.types";
+import { TUserLoginPayload, TUserPayload } from "./user.types";
+import { generateToken } from "../../utils/jwtFunctions";
 
 const registerService = async (payload: TUserPayload) => {
   const { name, email, password, ...profileData } = payload;
@@ -40,6 +41,33 @@ const registerService = async (payload: TUserPayload) => {
   return result;
 };
 
+const loginService = async (payload: TUserLoginPayload) => {
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: { email: payload.email },
+  });
+
+  const isPasswordMatched = await bcrypt.compare(payload.password, userData.password);
+
+  if (!isPasswordMatched) {
+    throw new Error("Password didn't match");
+  }
+
+  const userPayload = {
+    id: userData.id,
+    name: userData.name,
+    email: userData.email,
+  };
+
+  const token = generateToken(
+    userPayload,
+    config.jwt_access_secret,
+    config.jwt_access_expiresin
+  );
+
+  return { ...userPayload, token };
+};
+
 export const UserServices = {
   registerService,
+  loginService,
 };

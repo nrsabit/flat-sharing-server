@@ -15,6 +15,18 @@ const registerController = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const loginController = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserServices.loginService(req.body);
+
+  handleResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User logged in successfully",
+    data: result,
+  });
+});
+
 export const UserControllers = {
   registerController,
+  loginController,
 };

@@ -6,3 +6,8 @@ export type TUserPayload = {
   profession: string;
   address: string;
 };
+
+export type TUserLoginPayload = {
+  email: string;
+  password: string;
+};

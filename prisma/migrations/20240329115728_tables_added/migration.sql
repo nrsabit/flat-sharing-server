@@ -57,6 +57,9 @@ CREATE TABLE "userProfiles" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "userProfiles_userId_key" ON "userProfiles"("userId");
 
 -- AddForeignKey
