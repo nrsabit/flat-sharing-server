@@ -1,4 +1,4 @@
-import validateRequest from "../../utils/validateRequest";
+import validateRequest from "../../middlewares/validateRequest";
 import { UserControllers } from "./user.controllers";
 import express from "express";
 import { UserValidations } from "./user.validations";

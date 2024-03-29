@@ -42,10 +42,13 @@ const registerService = async (payload: TUserPayload) => {
 };
 
 const loginService = async (payload: TUserLoginPayload) => {
+
+  // checking the user is exist or not. 
   const userData = await prisma.user.findUniqueOrThrow({
     where: { email: payload.email },
   });
 
+  // validating the password
   const isPasswordMatched = await bcrypt.compare(payload.password, userData.password);
 
   if (!isPasswordMatched) {
@@ -58,6 +61,7 @@ const loginService = async (payload: TUserLoginPayload) => {
     email: userData.email,
   };
 
+  // generating the token
   const token = generateToken(
     userPayload,
     config.jwt_access_secret,
