@@ -17,6 +17,10 @@ const auth = () => {
 
       const decodedUser = verifyToken(token) as JwtPayload;
 
+      if (!decodedUser) {
+        throw new Error("Unauthorized Access");
+      }
+
       await prisma.user.findUniqueOrThrow({
         where: { id: decodedUser.id },
       });
