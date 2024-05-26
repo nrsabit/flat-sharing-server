@@ -3,9 +3,10 @@ import catchAsync from "../../utils/catchAsync";
 import handleResponse from "../../utils/handleResponse";
 import httpStatus from "http-status";
 import { BookingServices } from "./booking.services";
+import { TUserPayload } from "../user/user.types";
 
 const bookingRequestController = catchAsync(
-  async (req: Request & { user?: any }, res: Response) => {
+  async (req: Request & { user?: TUserPayload }, res: Response) => {
     const user = req.user;
     const result = await BookingServices.bookingRequest(user, req.body);
 
@@ -18,9 +19,9 @@ const bookingRequestController = catchAsync(
   }
 );
 
-const getAllBookingsController = catchAsync(
-  async (req: Request, res: Response) => {
-    const result = await BookingServices.getAllBookingsService();
+const getMyBookingsController = catchAsync(
+  async (req: Request & { user?: TUserPayload }, res: Response) => {
+    const result = await BookingServices.getMyBookingsService(req.user);
 
     handleResponse(res, {
       success: true,
@@ -50,6 +51,6 @@ const updateBookingController = catchAsync(
 
 export const BookingControllers = {
   bookingRequestController,
-  getAllBookingsController,
+  getMyBookingsController,
   updateBookingController,
 };

@@ -8,7 +8,7 @@ import { flatFilterableFields } from "./flat.constants";
 import { paginationOptions } from "../../shared/global.constants";
 
 const createFlatController = catchAsync(async (req: Request, res: Response) => {
-  const result = await FlatServices.createFlatService(req.body);
+  const result = await FlatServices.createFlatService(req);
 
   handleResponse(res, {
     success: true,
@@ -34,6 +34,20 @@ const getAllFlatsController = catchAsync(
   }
 );
 
+const getSingleFlatController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await FlatServices.getSingleFlatService(id);
+
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Single Flat retrieved successfully",
+      data: result,
+    });
+  }
+);
+
 const updateFlatController = catchAsync(async (req: Request, res: Response) => {
   const { flatId } = req.params;
   const result = await FlatServices.updateFlatService(flatId, req.body);
@@ -49,5 +63,6 @@ const updateFlatController = catchAsync(async (req: Request, res: Response) => {
 export const FlatControllers = {
   createFlatController,
   getAllFlatsController,
+  getSingleFlatController,
   updateFlatController,
 };

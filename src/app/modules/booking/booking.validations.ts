@@ -6,11 +6,15 @@ const bookingRequestSchema = z.object({
     required_error: "Flat Id is Required",
     invalid_type_error: "Flat Id must be string",
   }),
+  additionalInformation: z.string({
+    required_error: "Additional Info is Required",
+    invalid_type_error: "Additional Info must be string",
+  }),
 });
 
 const updateStatusSchema = z.object({
   status: z.enum(
-    [BokingStatus.BOOKED, BokingStatus.PENDING, BokingStatus.REJECTED],
+    [BokingStatus.APPROVED, BokingStatus.PENDING, BokingStatus.REJECTED],
     {
       required_error: "Status is Required",
       invalid_type_error: "Status must be PENDING, BOOKED or REJECTED",

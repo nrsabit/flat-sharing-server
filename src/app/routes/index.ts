@@ -2,13 +2,12 @@ import express from "express";
 import { UserRoutes } from "../modules/user/user.routes";
 import { FlatRoutes } from "../modules/flat/flat.routes";
 import { BookingRoutes } from "../modules/booking/booking.routes";
-import { ProfileRoutes } from "../modules/profile/profile.routers";
 
 const routes = express.Router();
 
 const moduleRoutes = [
   {
-    path: "/",
+    path: "/users",
     route: UserRoutes,
   },
   {
@@ -16,13 +15,9 @@ const moduleRoutes = [
     route: FlatRoutes,
   },
   {
-    path: "/",
+    path: "/bookings",
     route: BookingRoutes,
-  },
-  {
-    path: "/profile",
-    route: ProfileRoutes,
-  },
+  }
 ];
 
 moduleRoutes.map((route) => {

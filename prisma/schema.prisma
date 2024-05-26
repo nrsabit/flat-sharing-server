@@ -8,64 +8,49 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  name        String
-  email       String       @unique
-  password    String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  userProfile UserProfile?
-  booking     Booking[]
+  id        String    @id @default(uuid())
+  userName  String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  booking   Booking[]
 
   @@map("users")
 }
 
 model Flat {
-  id                   String    @id @default(uuid())
-  squareFeet           Int
-  totalBedrooms        Int
-  totalRooms           Int
-  utilitiesDescription String
-  location             String
-  description          String
-  rent                 Int
-  availability         Boolean   @default(true)
-  advanceAmount        Int
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  booking              Booking[]
+  id              String    @id @default(uuid())
+  totalBedrooms   Int
+  location        String
+  description     String
+  rent            Int
+  amenities       String
+  availability    Boolean   @default(true)
+  images String[]  @default([""])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  booking         Booking[]
 
   @@map("flats")
 }
 
 model Booking {
-  id        String       @id @default(uuid())
-  flatId    String
-  userId    String
-  status    BokingStatus @default(PENDING)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  user      User         @relation(fields: [userId], references: [id])
-  flat      Flat         @relation(fields: [flatId], references: [id])
+  id                    String       @id @default(uuid())
+  flatId                String
+  userId                String
+  additionalInformation String
+  status                BokingStatus @default(PENDING)
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  user                  User         @relation(fields: [userId], references: [id])
+  flat                  Flat         @relation(fields: [flatId], references: [id])
 
   @@map("bookings")
 }
 
-model UserProfile {
-  id         String   @id @default(uuid())
-  userId     String   @unique
-  bio        String
-  profession String
-  address    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id])
-
-  @@map("userProfiles")
-}
-
 enum BokingStatus {
   PENDING
-  BOOKED
+  APPROVED
   REJECTED
 }

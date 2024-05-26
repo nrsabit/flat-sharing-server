@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 const createUserSchema = z.object({
-  name: z.string({
-    required_error: "Name is Required",
-    invalid_type_error: "Name must be string",
+  userName: z.string({
+    required_error: "User Name is Required",
+    invalid_type_error: "User Name must be string",
   }),
   email: z.string({
     required_error: "Email is Required",
@@ -12,18 +12,6 @@ const createUserSchema = z.object({
   password: z.string({
     required_error: "Password is Required",
     invalid_type_error: "Password must be string",
-  }),
-  bio: z.string({
-    required_error: "Bio is Required",
-    invalid_type_error: "Bio must be string",
-  }),
-  profession: z.string({
-    required_error: "Profession is Required",
-    invalid_type_error: "Profession must be string",
-  }),
-  address: z.string({
-    required_error: "Address is Required",
-    invalid_type_error: "Address must be string",
   }),
 });
 
@@ -38,7 +26,19 @@ const loginUserSchema = z.object({
   }),
 });
 
+const changePasswordSchema = z.object({
+  oldPassword: z.string({
+    required_error: "Old Password is Required",
+    invalid_type_error: "Old Password must be string",
+  }),
+  newPassword: z.string({
+    required_error: "New Password is Required",
+    invalid_type_error: "New Password must be string",
+  }),
+});
+
 export const UserValidations = {
   createUserSchema,
   loginUserSchema,
+  changePasswordSchema,
 };

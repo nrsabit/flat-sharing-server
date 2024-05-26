@@ -1,10 +1,7 @@
 export type TUserPayload = {
-  name: string;
+  userName: string;
   email: string;
   password: string;
-  bio: string;
-  profession: string;
-  address: string;
 };
 
 export type TUserLoginPayload = {

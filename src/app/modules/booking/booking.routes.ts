@@ -6,21 +6,17 @@ import { BookingControllers } from "./booking.controllers";
 
 const router = express.Router();
 
-router.get(
-  "/booking-requests",
-  auth(),
-  BookingControllers.getAllBookingsController
-);
+router.get("/", auth(), BookingControllers.getMyBookingsController);
 
 router.post(
-  "/booking-applications",
+  "/",
   auth(),
   validateRequest(BookingValidations.bookingRequestSchema),
   BookingControllers.bookingRequestController
 );
 
 router.put(
-  "/booking-requests/:bookingId",
+  "/:bookingId",
   auth(),
   validateRequest(BookingValidations.updateStatusSchema),
   BookingControllers.updateBookingController
