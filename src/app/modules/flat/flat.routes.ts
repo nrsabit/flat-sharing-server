@@ -13,7 +13,7 @@ router.get("/:id", auth(), FlatControllers.getSingleFlatController);
 
 router.post(
   "/",
-  // auth(),
+  auth(),
   fileUploader.upload.array("images"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = FlatValidations.createFlatSchema.parse(
