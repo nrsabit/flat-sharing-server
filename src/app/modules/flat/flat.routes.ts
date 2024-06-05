@@ -9,9 +9,10 @@ const router = express.Router();
 
 router.get("/", FlatControllers.getAllFlatsController);
 
+router.get("/my-flats", auth(), FlatControllers.getMyFlatsController);
+
 router.get("/:id", FlatControllers.getSingleFlatController);
 
-router.get("/my-flats", auth(), FlatControllers.getMyFlatsController);
 
 router.post(
   "/",

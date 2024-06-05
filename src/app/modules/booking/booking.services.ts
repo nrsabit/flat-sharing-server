@@ -30,6 +30,7 @@ const getMyBookingsService = async (user: TUserPayload) => {
 
   const result = await prisma.booking.findMany({
     where: { userId: userInfo.id },
+    include: { flat: true },
   });
 
   return result;

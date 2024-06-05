@@ -64,13 +64,14 @@ const getAllFlatsService = async (
   // applying the Filtering.
   if (Object.keys(restFilterData).length > 0) {
     andCondition.push({
-      AND: Object.keys(filterData).map((key) => ({
-        [key]: { equals: filterData[key] === "true" ? true : false },
+      AND: Object.keys(restFilterData).map((key) => ({
+        [key]: { equals: Number(filterData[key]) },
       })),
     });
   }
 
   const whereClause: Prisma.FlatWhereInput = { AND: andCondition };
+  console.dir(whereClause, { depth: "infinity" });
 
   const result = await prisma.flat.findMany({
     where: whereClause,
