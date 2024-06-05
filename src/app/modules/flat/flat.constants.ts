@@ -1,8 +1,8 @@
-export const flatSearchableFields = [
-  "location",
-];
-export const flatFilterableFields = ["availability", "searchTerm"];
-export const flatSortableFields = [
-  "rent",
+export const flatSearchableFields = ["location"];
+export const flatFilterableFields = [
   "totalBedrooms",
+  "searchTerm",
+  "minPrice",
+  "maxPrice",
 ];
+export const flatSortableFields = ["rent", "totalBedrooms"];

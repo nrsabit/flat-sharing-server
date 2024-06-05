@@ -16,7 +16,7 @@ router.get("/my-flats", auth(), FlatControllers.getMyFlatsController);
 router.post(
   "/",
   auth(),
-  fileUploader.upload.array("images"),
+  fileUploader.upload.array("files"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = FlatValidations.createFlatSchema.parse(
       JSON.parse(req.body.data)

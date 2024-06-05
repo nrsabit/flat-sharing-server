@@ -8,16 +8,21 @@ import { flatFilterableFields } from "./flat.constants";
 import { paginationOptions } from "../../shared/global.constants";
 import { TUserPayload } from "../user/user.types";
 
-const createFlatController = catchAsync(async (req: Request, res: Response) => {
-  const result = await FlatServices.createFlatService(req);
+const createFlatController = catchAsync(
+  async (req: Request & { user?: TUserPayload }, res: Response) => {
+    const result = await FlatServices.createFlatService(
+      req.user as TUserPayload,
+      req
+    );
 
-  handleResponse(res, {
-    success: true,
-    statusCode: httpStatus.CREATED,
-    message: "Flat added successfully",
-    data: result,
-  });
-});
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Flat added successfully",
+      data: result,
+    });
+  }
+);
 
 const getAllFlatsController = catchAsync(
   async (req: Request, res: Response) => {
@@ -51,7 +56,9 @@ const getSingleFlatController = catchAsync(
 
 const getMyFlatsController = catchAsync(
   async (req: Request & { user?: TUserPayload }, res: Response) => {
-    const result = await FlatServices.getMyFlatsService(req.user as TUserPayload);
+    const result = await FlatServices.getMyFlatsService(
+      req.user as TUserPayload
+    );
 
     handleResponse(res, {
       success: true,
@@ -77,7 +84,10 @@ const updateFlatController = catchAsync(async (req: Request, res: Response) => {
 const deleteFlatController = catchAsync(
   async (req: Request & { user?: TUserPayload }, res: Response) => {
     const { id } = req.params;
-    const result = await FlatServices.deleteFlatService(req.user as TUserPayload, id);
+    const result = await FlatServices.deleteFlatService(
+      req.user as TUserPayload,
+      id
+    );
 
     handleResponse(res, {
       success: true,

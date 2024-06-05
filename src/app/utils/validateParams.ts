@@ -4,12 +4,16 @@ const validateParams = (
 ) => {
   let filteredObject: Record<string, unknown> = {};
   for (const key of fields) {
-    if (queryObj && Object.hasOwnProperty.call(queryObj, key)) {
+    if (
+      queryObj &&
+      Object.hasOwnProperty.call(queryObj, key) &&
+      queryObj[key] !== undefined
+    ) {
       filteredObject[key] = queryObj[key];
     }
   }
 
-  return filteredObject
+  return filteredObject;
 };
 
-export default validateParams
+export default validateParams;

@@ -6,9 +6,10 @@ import { Request } from "express";
 import { fileUploader } from "../../utils/fileUploader";
 import { TUserPayload } from "../user/user.types";
 
-const createFlatService = async (req: Request) => {
+const createFlatService = async (user: TUserPayload, req: Request) => {
   const images = req?.files as Express.Multer.File[];
   const data = req.body;
+  data.userId = user?.id;
 
   let uploadedImages = [""];
   if (images) {
@@ -45,8 +46,23 @@ const getAllFlatsService = async (
     });
   }
 
+  // filter with max or min rent price
+  if (filterData.minPrice || filterData.maxPrice) {
+    const rentCondition: any = {};
+    if (filterData.minPrice) {
+      rentCondition.gte = Number(filterData.minPrice);
+    }
+    if (filterData.maxPrice) {
+      rentCondition.lte = Number(filterData.maxPrice);
+    }
+    andCondition.push({ rent: rentCondition });
+  }
+
+  // Remove minPrice and maxPrice from filterData
+  const { minPrice, maxPrice, ...restFilterData } = filterData;
+
   // applying the Filtering.
-  if (Object.keys(filterData).length > 0) {
+  if (Object.keys(restFilterData).length > 0) {
     andCondition.push({
       AND: Object.keys(filterData).map((key) => ({
         [key]: { equals: filterData[key] === "true" ? true : false },
