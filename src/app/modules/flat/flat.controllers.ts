@@ -6,6 +6,7 @@ import httpStatus from "http-status";
 import validateParams from "../../utils/validateParams";
 import { flatFilterableFields } from "./flat.constants";
 import { paginationOptions } from "../../shared/global.constants";
+import { TUserPayload } from "../user/user.types";
 
 const createFlatController = catchAsync(async (req: Request, res: Response) => {
   const result = await FlatServices.createFlatService(req);
@@ -48,6 +49,19 @@ const getSingleFlatController = catchAsync(
   }
 );
 
+const getMyFlatsController = catchAsync(
+  async (req: Request & { user?: TUserPayload }, res: Response) => {
+    const result = await FlatServices.getMyFlatsService(req.user as TUserPayload);
+
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "My Flats retrieved successfully",
+      data: result,
+    });
+  }
+);
+
 const updateFlatController = catchAsync(async (req: Request, res: Response) => {
   const { flatId } = req.params;
   const result = await FlatServices.updateFlatService(flatId, req.body);
@@ -60,9 +74,25 @@ const updateFlatController = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteFlatController = catchAsync(
+  async (req: Request & { user?: TUserPayload }, res: Response) => {
+    const { id } = req.params;
+    const result = await FlatServices.deleteFlatService(req.user as TUserPayload, id);
+
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Flat deleted successfully",
+      data: result,
+    });
+  }
+);
+
 export const FlatControllers = {
   createFlatController,
   getAllFlatsController,
   getSingleFlatController,
+  getMyFlatsController,
   updateFlatController,
+  deleteFlatController,
 };

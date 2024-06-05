@@ -3,7 +3,7 @@ import prisma from "../shared/prisma";
 import { verifyToken } from "../utils/jwtFunctions";
 import { NextFunction, Request, Response } from "express";
 
-const auth = () => {
+const auth = (roles?: string[]) => {
   return async (
     req: Request & { user?: any },
     res: Response,
@@ -21,8 +21,12 @@ const auth = () => {
         throw new Error("Unauthorized Access");
       }
 
+      if (roles?.length && !roles.includes(decodedUser?.role)) {
+        throw new Error("Unauthorized Access");
+      }
+
       await prisma.user.findUniqueOrThrow({
-        where: { id: decodedUser.id },
+        where: { id: decodedUser.id, isActive: true },
       });
 
       req.user = decodedUser;

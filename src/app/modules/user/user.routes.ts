@@ -6,6 +6,8 @@ import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
+router.get("/", auth(["admin"]), UserControllers.getAllUsersController);
+
 router.post(
   "/register",
   validateRequest(UserValidations.createUserSchema),
@@ -23,6 +25,20 @@ router.post(
   auth(),
   validateRequest(UserValidations.changePasswordSchema),
   UserControllers.changePasswordController
+);
+
+router.put(
+  "/update-profile",
+  auth(),
+  validateRequest(UserValidations.updateProfileSchema),
+  UserControllers.editProfileController
+);
+
+router.put(
+  "/update-status",
+  auth(["admin"]),
+  validateRequest(UserValidations.updateUserStatus),
+  UserControllers.updateStatusController
 );
 
 export const UserRoutes = router;

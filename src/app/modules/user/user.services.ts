@@ -4,6 +4,11 @@ import prisma from "../../shared/prisma";
 import { TUserLoginPayload, TUserPayload } from "./user.types";
 import { generateToken } from "../../utils/jwtFunctions";
 
+const getAllUsersService = async () => {
+  const result = await prisma.user.findMany();
+  return result;
+};
+
 const registerService = async (payload: TUserPayload) => {
   const { userName, email, password } = payload;
 
@@ -27,7 +32,7 @@ const registerService = async (payload: TUserPayload) => {
 const loginService = async (payload: TUserLoginPayload) => {
   // checking the user is exist or not.
   const userData = await prisma.user.findUniqueOrThrow({
-    where: { email: payload.email },
+    where: { email: payload.email, isActive: true },
   });
 
   // validating the password
@@ -44,16 +49,17 @@ const loginService = async (payload: TUserLoginPayload) => {
     id: userData.id,
     userName: userData.userName,
     email: userData.email,
+    role: userData.role,
   };
 
   // generating the token
-  const token = generateToken(
+  const accessToken = generateToken(
     userPayload,
     config.jwt_access_secret,
     config.jwt_access_expiresin
   );
 
-  return { ...userPayload, token };
+  return { ...userPayload, accessToken };
 };
 
 const changePasswordService = async (
@@ -63,6 +69,7 @@ const changePasswordService = async (
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
       email: user.email,
+      isActive: true
     },
   });
 
@@ -94,8 +101,29 @@ const changePasswordService = async (
   };
 };
 
+const editProfileService = async (user: any, payload: any) => {
+  const result = await prisma.user.update({
+    where: { id: user?.id },
+    data: payload,
+  });
+
+  return result;
+};
+
+const updateUserStatus = async (id: string, payload: any) => {
+  const result = await prisma.user.update({
+    where: { id },
+    data: payload,
+  });
+
+  return result;
+};
+
 export const UserServices = {
   registerService,
   loginService,
   changePasswordService,
+  editProfileService,
+  updateUserStatus,
+  getAllUsersService,
 };

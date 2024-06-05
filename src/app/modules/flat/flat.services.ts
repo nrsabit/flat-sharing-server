@@ -4,6 +4,7 @@ import sortPaginate from "../../utils/sortPaginate";
 import { flatSearchableFields } from "./flat.constants";
 import { Request } from "express";
 import { fileUploader } from "../../utils/fileUploader";
+import { TUserPayload } from "../user/user.types";
 
 const createFlatService = async (req: Request) => {
   const images = req?.files as Express.Multer.File[];
@@ -78,6 +79,14 @@ const getSingleFlatService = async (id: string) => {
   return result;
 };
 
+const getMyFlatsService = async (user: TUserPayload) => {
+  const result = await prisma.flat.findMany({
+    where: { userId: user?.id },
+  });
+
+  return result;
+};
+
 const updateFlatService = async (id: string, payload: Partial<Flat>) => {
   const result = await prisma.flat.update({
     where: { id },
@@ -87,9 +96,26 @@ const updateFlatService = async (id: string, payload: Partial<Flat>) => {
   return result;
 };
 
+const deleteFlatService = async (user: TUserPayload, id: string) => {
+  const flatInfo = await prisma.flat.findUniqueOrThrow({ where: { id } });
+
+  if (user?.role !== "admin" || flatInfo.userId !== user?.id) {
+    throw new Error("Unauthorized");
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.booking.deleteMany({ where: { flatId: id } });
+    const deletedData = await tx.flat.delete({ where: { id } });
+    return deletedData;
+  });
+  return result;
+};
+
 export const FlatServices = {
   createFlatService,
   getAllFlatsService,
   getSingleFlatService,
+  getMyFlatsService,
   updateFlatService,
+  deleteFlatService,
 };

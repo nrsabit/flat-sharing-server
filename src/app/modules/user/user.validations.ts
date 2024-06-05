@@ -37,8 +37,32 @@ const changePasswordSchema = z.object({
   }),
 });
 
+const updateProfileSchema = z.object({
+  userName: z
+    .string({
+      invalid_type_error: "UserName must be string",
+    })
+    .optional(),
+  email: z
+    .string({
+      invalid_type_error: "Email must be string",
+    })
+    .optional(),
+});
+
+const updateUserStatus = z.object({
+  role: z.enum(["admin", "user"]).optional(),
+  isActive: z
+    .boolean({
+      invalid_type_error: "Active Status Must be boolean",
+    })
+    .optional(),
+});
+
 export const UserValidations = {
   createUserSchema,
   loginUserSchema,
   changePasswordSchema,
+  updateProfileSchema,
+  updateUserStatus
 };

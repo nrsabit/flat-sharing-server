@@ -17,9 +17,15 @@ const bookingRequest = async (user: any, payload: Partial<Booking>) => {
   return result;
 };
 
-const getMyBookingsService = async (user: TUserPayload | undefined) => {
+const getAllBookingsService = async () => {
+  const result = await prisma.booking.findMany();
+
+  return result;
+};
+
+const getMyBookingsService = async (user: TUserPayload) => {
   const userInfo = await prisma.user.findUniqueOrThrow({
-    where: { email: user?.email },
+    where: { email: user?.email, isActive: true },
   });
 
   const result = await prisma.booking.findMany({
@@ -42,4 +48,5 @@ export const BookingServices = {
   bookingRequest,
   getMyBookingsService,
   updateBookingService,
+  getAllBookingsService,
 };

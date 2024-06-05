@@ -12,25 +12,30 @@ model User {
   userName  String
   email     String    @unique
   password  String
+  role      UserRoles @default(user)
+  isActive  Boolean   @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  booking   Booking[]
+  bookings  Booking[]
+  flats     Flat[]
 
   @@map("users")
 }
 
 model Flat {
-  id              String    @id @default(uuid())
-  totalBedrooms   Int
-  location        String
-  description     String
-  rent            Int
-  amenities       String
-  availability    Boolean   @default(true)
-  images String[]  @default([""])
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  booking         Booking[]
+  id            String    @id @default(uuid())
+  totalBedrooms Int
+  location      String
+  description   String
+  rent          Int
+  amenities     String
+  userId        String
+  sharedBy      User      @relation(fields: [userId], references: [id])
+  availability  Boolean   @default(true)
+  images        String[]  @default([""])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  booking       Booking[]
 
   @@map("flats")
 }
@@ -53,4 +58,9 @@ enum BokingStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum UserRoles {
+  user
+  admin
 }

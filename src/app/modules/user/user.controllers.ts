@@ -5,6 +5,19 @@ import handleResponse from "../../utils/handleResponse";
 import httpStatus from "http-status";
 import { TUserPayload } from "./user.types";
 
+const getAllUsersController = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await UserServices.getAllUsersService();
+
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Users retrieved successfully",
+      data: result,
+    });
+  }
+);
+
 const registerController = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.registerService(req.body);
 
@@ -45,8 +58,38 @@ const changePasswordController = catchAsync(
   }
 );
 
+const editProfileController = catchAsync(
+  async (req: Request & { user?: any }, res: Response) => {
+    const result = await UserServices.editProfileService(req.user, req.body);
+
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Profile Updated Successfully",
+      data: result,
+    });
+  }
+);
+
+const updateStatusController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await UserServices.updateUserStatus(id, req.body);
+
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "User Updated Successfully",
+      data: result,
+    });
+  }
+);
+
 export const UserControllers = {
+  getAllUsersController,
   registerController,
   loginController,
   changePasswordController,
+  editProfileController,
+  updateStatusController,
 };

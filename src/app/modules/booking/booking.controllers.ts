@@ -19,9 +19,24 @@ const bookingRequestController = catchAsync(
   }
 );
 
+const getAllBookingsController = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await BookingServices.getAllBookingsService();
+
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Booking requests retrieved successfully",
+      data: result,
+    });
+  }
+);
+
 const getMyBookingsController = catchAsync(
   async (req: Request & { user?: TUserPayload }, res: Response) => {
-    const result = await BookingServices.getMyBookingsService(req.user);
+    const result = await BookingServices.getMyBookingsService(
+      req.user as TUserPayload
+    );
 
     handleResponse(res, {
       success: true,
@@ -53,4 +68,5 @@ export const BookingControllers = {
   bookingRequestController,
   getMyBookingsController,
   updateBookingController,
+  getAllBookingsController,
 };

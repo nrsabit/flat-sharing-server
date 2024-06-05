@@ -6,7 +6,9 @@ import { BookingControllers } from "./booking.controllers";
 
 const router = express.Router();
 
-router.get("/", auth(), BookingControllers.getMyBookingsController);
+router.get("/", auth(["admin"]), BookingControllers.getAllBookingsController);
+
+router.get("/my-bookings", auth(), BookingControllers.getMyBookingsController);
 
 router.post(
   "/",
@@ -17,7 +19,7 @@ router.post(
 
 router.put(
   "/:bookingId",
-  auth(),
+  auth(["admin"]),
   validateRequest(BookingValidations.updateStatusSchema),
   BookingControllers.updateBookingController
 );

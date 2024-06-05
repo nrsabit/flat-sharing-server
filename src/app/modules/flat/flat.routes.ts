@@ -9,7 +9,9 @@ const router = express.Router();
 
 router.get("/", FlatControllers.getAllFlatsController);
 
-router.get("/:id", auth(), FlatControllers.getSingleFlatController);
+router.get("/:id", FlatControllers.getSingleFlatController);
+
+router.get("/my-flats", auth(), FlatControllers.getMyFlatsController);
 
 router.post(
   "/",
@@ -29,5 +31,7 @@ router.put(
   validateRequest(FlatValidations.updateFlatSchema),
   FlatControllers.updateFlatController
 );
+
+router.delete("/:id", auth(), FlatControllers.deleteFlatController);
 
 export const FlatRoutes = router;
