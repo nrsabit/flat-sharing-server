@@ -7,7 +7,7 @@ import routes from "./app/routes";
 const app: Application = express();
 
 // parsers
-app.use(cors({origin: "http://localhost:3000"}));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 
 // main route function
