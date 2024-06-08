@@ -6,13 +6,28 @@ import httpStatus from "http-status";
 import { TUserPayload } from "./user.types";
 
 const getAllUsersController = catchAsync(
-  async (req: Request, res: Response) => {
-    const result = await UserServices.getAllUsersService();
+  async (req: Request & { user?: TUserPayload }, res: Response) => {
+    const result = await UserServices.getAllUsersService(
+      req.user as TUserPayload
+    );
 
     handleResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Users retrieved successfully",
+      data: result,
+    });
+  }
+);
+
+const getMeController = catchAsync(
+  async (req: Request & { user?: TUserPayload }, res: Response) => {
+    const result = await UserServices.getMeService(req.user as TUserPayload);
+
+    handleResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "User retrieved successfully",
       data: result,
     });
   }
@@ -92,4 +107,5 @@ export const UserControllers = {
   changePasswordController,
   editProfileController,
   updateStatusController,
+  getMeController,
 };

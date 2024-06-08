@@ -4,8 +4,18 @@ import prisma from "../../shared/prisma";
 import { TUserLoginPayload, TUserPayload } from "./user.types";
 import { generateToken } from "../../utils/jwtFunctions";
 
-const getAllUsersService = async () => {
-  const result = await prisma.user.findMany();
+const getAllUsersService = async (user: TUserPayload) => {
+  const result = await prisma.user.findMany({
+    where: { email: { not: user?.email } },
+  });
+  return result;
+};
+
+const getMeService = async (user: TUserPayload) => {
+  const result = await prisma.user.findUniqueOrThrow({
+    where: { id: user?.id },
+  });
+
   return result;
 };
 
@@ -69,7 +79,7 @@ const changePasswordService = async (
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
       email: user.email,
-      isActive: true
+      isActive: true,
     },
   });
 
@@ -87,7 +97,7 @@ const changePasswordService = async (
     config.salt
   );
 
-  await prisma.user.update({
+  const result = await prisma.user.update({
     where: {
       email: userData.email,
     },
@@ -96,9 +106,7 @@ const changePasswordService = async (
     },
   });
 
-  return {
-    message: "Password changed successfully!",
-  };
+  return result;
 };
 
 const editProfileService = async (user: any, payload: any) => {
@@ -126,4 +134,5 @@ export const UserServices = {
   editProfileService,
   updateUserStatus,
   getAllUsersService,
+  getMeService,
 };

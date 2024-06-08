@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get("/", auth(["admin"]), UserControllers.getAllUsersController);
 
+router.get("/me", auth(), UserControllers.getMeController);
+
 router.post(
   "/register",
   validateRequest(UserValidations.createUserSchema),
@@ -35,7 +37,7 @@ router.put(
 );
 
 router.put(
-  "/update-status",
+  "/update-status/:id",
   auth(["admin"]),
   validateRequest(UserValidations.updateUserStatus),
   UserControllers.updateStatusController

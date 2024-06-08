@@ -18,7 +18,9 @@ const bookingRequest = async (user: any, payload: Partial<Booking>) => {
 };
 
 const getAllBookingsService = async () => {
-  const result = await prisma.booking.findMany();
+  const result = await prisma.booking.findMany({
+    include: { flat: true, user: true },
+  });
 
   return result;
 };
