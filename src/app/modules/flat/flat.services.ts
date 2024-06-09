@@ -71,7 +71,6 @@ const getAllFlatsService = async (
   }
 
   const whereClause: Prisma.FlatWhereInput = { AND: andCondition };
-  console.dir(whereClause, { depth: "infinity" });
 
   const result = await prisma.flat.findMany({
     where: whereClause,
@@ -116,7 +115,7 @@ const updateFlatService = async (id: string, payload: Partial<Flat>) => {
 const deleteFlatService = async (user: TUserPayload, id: string) => {
   const flatInfo = await prisma.flat.findUniqueOrThrow({ where: { id } });
 
-  if (user?.role !== "admin" || flatInfo.userId !== user?.id) {
+  if (user?.role !== "admin" && flatInfo.userId !== user?.id) {
     throw new Error("Unauthorized");
   }
 
