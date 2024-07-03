@@ -3,6 +3,9 @@
 
 This is a project for flat sharing, by using this we can add, book flats and see the available flats.
 
+## About Project
+
+This is the backend for flat sharing website, I have initialized the calls and authentications by using the backend, so in this site, you will be able to share your flats, and book shared flats, and if you are an admin, then you can update and delete the flats and the requests.
 
 ## Run the project locally
 
